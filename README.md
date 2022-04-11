@@ -1,4 +1,4 @@
-# Full-Stack Demonstration of MLflow Deployment and Use with docker-compose
+# MLflow Deployment and Usage with docker-compose
 
 Easily deploy an MLflow tracking server with 1 command.
 
