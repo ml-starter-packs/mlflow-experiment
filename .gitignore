@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Project files
-nlp-demo/data/
+nlp-demo/out/

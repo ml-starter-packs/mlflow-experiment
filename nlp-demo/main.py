@@ -29,7 +29,7 @@ logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
 
-def log_predictions(predictions: List[Dict[str, Any]], fdir="out") -> str:
+def log_predictions(inputs: List[str], predictions: List[Dict[str, Any]], fdir="out") -> str:
     """Logs predictions to single file.
     Needs refactoring to avoid file collisions if this
     is to be made multi-threaded. (e.g. use /tmp/{process_id})
@@ -37,6 +37,10 @@ def log_predictions(predictions: List[Dict[str, Any]], fdir="out") -> str:
     os.makedirs(f"{fdir}", exist_ok=True)  # can use folders
     fname = f"{fdir}/predictions.json"
     preds = [max(p, key=lambda x: x["score"]) for p in predictions]
+    # insert inputs into each prediction dictionary
+    for idx, p in enumerate(preds):
+        p['input'] = inputs[idx]
+
     with open(fname, "w", encoding="utf-8") as f:
         json.dump(preds, f, indent=2)
     return fname
@@ -78,7 +82,7 @@ def run_experiment(
 
             # demonstrate storing artifacts (any kind)
             # here we extract the predictions with the highest score
-            fname = log_predictions(predictions)
+            fname = log_predictions(data, predictions)
             mlflow.log_artifact(fname, artifact_path="out")
 
             # can log predictions as files directly (no saving to disk)

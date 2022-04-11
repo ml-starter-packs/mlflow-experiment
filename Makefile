@@ -1,8 +1,9 @@
+run:
+	docker-compose run nlp
+
 start:
 	docker-compose up -d --build
 
-run:
-	docker-compose run nlp
 
 # TODO: docker-compose support for GPU?
 #gpu-test:
