@@ -6,6 +6,5 @@ FROM python:3.9
 WORKDIR /work
 
 COPY requirements.txt /tmp
-COPY main.py /work
 
 RUN cd /tmp && pip install -r requirements.txt

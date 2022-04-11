@@ -78,6 +78,7 @@ services:
             "
         volumes:
             - ./wait-for-it.sh:/tmp/wait-for-it.sh
+            - ./nlp-demo:/work
 
 
 volumes:
