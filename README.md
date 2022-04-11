@@ -14,10 +14,10 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 
 2. `cd` into the `mlflow-experiment` directory
 
-3. Build and run the containers with `docker-compose`
+3. Build and run the containers with `docker-compose up -d --build`:
 
     ```bash
-    docker-compose up -d --build
+    make
     ```
 
 4. Access MLflow UI with [http://localhost:5000](http://localhost:5000)
@@ -30,10 +30,10 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 
 ## Running New Experiments
 
-Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLFlow)
+Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLFlow) using `docker-compose run nlp`:
 
     ```bash
-    docker-compose run nlp
+    make run
     ```
 
 
