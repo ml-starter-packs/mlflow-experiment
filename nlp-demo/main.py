@@ -26,52 +26,71 @@ from transformers import pipeline
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
-# TODO load data from newline-delimited txt file
-with open("models.txt", "r") as f:
-    models = [s.replace("\n", "") for s in f.readlines()]
 
-with open("data.txt", "r") as f:
-    data = [s.replace("\n", "") for s in f.readlines()]
+def log_predictions(predictions: List[Dict[str, Any]], fdir="data") -> str:
+    os.makedirs(f"{fdir}", exist_ok=True)  # can use folders
+    fname = f"{fdir}/predictions.json"
+    preds = [max(p, key=lambda x: x['score']) for p in predictions]
+    with open(fname, "w", encoding="utf-8") as f:
+        json.dump(preds, f, indent=2)
 
-experiment = mlflow.set_experiment("demo")
+    return fname
 
-for model_uri in models:
-    with mlflow.start_run(experiment_id=experiment.experiment_id):
-        mlflow.log_param("model", model_uri)
-        # set tags that are meaningful for you
-        mlflow.set_tag("type", "exploration")
 
-        # the following tags are "reserved" by mlflow:
-        desc = f"{model_uri} being used in a demo evaluation."
-        mlflow.set_tag("mlflow.note.content", desc)
-        mlflow.set_tag("mlflow.user", "data-scientist-1")
+def run_experiment(experiment_name="demo", model_file='models.txt', data_file='data.txt'):
+    with open(model_file, "r") as f:
+        models = [s.replace("\n", "") for s in f.readlines()]
 
-        start_time = time.time()
-        model = pipeline(model=model_uri, return_all_scores=True)
-        time_load = time.time() - start_time
+    with open(data_file, "r") as f:
+        data = [s.replace("\n", "") for s in f.readlines()]
 
-        start_time = time.time()
-        predictions = model(data)
-        time_infer = time.time() - start_time
+    experiment = mlflow.set_experiment(experiment_name)
 
-        # demonstrate storing artifacts (any kind)
-        os.makedirs("data", exist_ok=True)  # can use folders
-        fname = "data/predictions.json"
-        with open(fname, "w", encoding="utf-8") as f:
-            json.dump(predictions, f, indent=2)
-        mlflow.log_artifact(fname)
+    for model_uri in models:
+        with mlflow.start_run(experiment_id=experiment.experiment_id):
+            mlflow.log_param("model", model_uri)
+            mlflow.log_artifact("main.py", artifact_path="scripts")  # store current file
+            mlflow.log_artifact("data.txt", artifact_path="data")
+            # set tags that are meaningful for you
+            mlflow.set_tag("type", "exploration")
+    
+            # the following tags are "reserved" by mlflow:
+            desc = f"{model_uri} being used in a demo evaluation."
+            mlflow.set_tag("mlflow.note.content", desc)
+            mlflow.set_tag("mlflow.user", "data-scientist-1")
+    
+            start_time = time.time()
+            model = pipeline(model=model_uri, return_all_scores=True)
+            time_load = time.time() - start_time
+    
+            start_time = time.time()
+            predictions = model(data)
+            time_infer = time.time() - start_time
+    
+            # demonstrate storing artifacts (any kind)
+            # here we extract the predictions with the highest score
+            fname = log_predictions(predictions)
+            mlflow.log_artifact(fname)
+    
+            # can log predictions as files directly (no saving to disk)
+            for idx, pred in enumerate(predictions):
+                mlflow.log_dict(pred, f"data/pred_{idx}.json")
+    
+            # compute metrics here somehow
+            # need to look up expected answers
+            metrics = {
+                "metric": random.random(),
+                "duration": time_load + time_infer,
+                "inference-time": time_infer,
+                "loading-time": time_load,
+            }
+            mlflow.log_metrics(metrics)
+    
+        logging.info(f"PREDICTIONS: {predictions}\n")
 
-        # can log individual predictions as well
-        for idx, pred in enumerate(predictions):
-            mlflow.log_dict(pred, f"data/pred_{idx}.json")
+    return experiment
 
-        # compute metrics here somehow
-        # need to look up expected answers
-        metrics = {
-            "metric": random.random(),
-            "duration": time_load + time_infer,
-            "inference-time": time_infer,
-            "loading-time": time_load,
-        }
-        mlflow.log_metrics(metrics)
-    print(f"{predictions}\n")
+
+if __name__ == "__main__":
+    experiment = run_experiment()
+    logging.info(f"EXPERIMENT: {experiment}")
