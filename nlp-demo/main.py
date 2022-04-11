@@ -14,7 +14,6 @@ import random
 import time
 from typing import Any, Dict, List
 
-import mlflow.pytorch
 from transformers import pipeline
 
 # for loading environment variables from a file:
@@ -36,7 +35,7 @@ def log_predictions(inputs: List[str], predictions: List[Dict[str, Any]], fdir="
     """
     os.makedirs(f"{fdir}", exist_ok=True)  # can use folders
     fname = f"{fdir}/predictions.json"
-    preds = [max(p, key=lambda x: x["score"]) for p in predictions]
+    preds = [max(p, key=lambda x: x["score"]).copy() for p in predictions]
     # insert inputs into each prediction dictionary
     for idx, p in enumerate(preds):
         p['input'] = inputs[idx]
