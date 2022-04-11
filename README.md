@@ -30,11 +30,12 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 
 ## Running New Experiments
 
-Edit `./nlp-demo/main.py` and run 
+Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLFlow)
 
     ```bash
-    make demo
+    docker-compose run nlp
     ```
+
 
 ## Architecture
 

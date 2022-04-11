@@ -59,7 +59,7 @@ services:
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow/ --host 0.0.0.0
 
-    run:
+    nlp:
         build: ./nlp-demo
         image: nlp-demo
         depends_on:
@@ -73,12 +73,12 @@ services:
         entrypoint: >
             /bin/sh -c "
             /tmp/wait-for-it.sh web:5000;
-            python main.py
+            cd /work/nlp-demo && python main.py;
             exit 0;
             "
         volumes:
             - ./wait-for-it.sh:/tmp/wait-for-it.sh
-            - ./nlp-demo:/work
+            - ./:/work
 
 
 volumes:
