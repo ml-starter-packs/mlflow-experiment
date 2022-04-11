@@ -1,0 +1,5 @@
+distilbert-base-uncased-finetuned-sst-2-english
+elozano/tweet_sentiment_eval
+nlptown/bert-base-multilingual-uncased-sentiment
+siebert/sentiment-roberta-large-english
+bhadresh-savani/distilbert-base-uncased-emotion
