@@ -1,4 +1,5 @@
-# MLflow On-Premise Deployment using Docker Compose
+# Full-Stack Demonstration of MLflow Deployment and Use with docker-compose
+
 Easily deploy an MLflow tracking server with 1 command.
 
 MinIO S3 is used as the artifact store and MySQL server is used as the backend store.
@@ -25,12 +26,12 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 5. Watch as experiments begin to populate as they run from [./nlp-demo/main.py](/nlp-demo/main.py).
 
 
-6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLFlow artifacts are organized in the S3-compatible object storage.
+6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage.
 
 
 ## Running New Experiments
 
-Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLFlow) using `docker-compose run nlp`:
+Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLflow) using `docker-compose run nlp`
 
     ```bash
     make run
@@ -40,14 +41,15 @@ Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your 
 ## Architecture
 
 The MLflow tracking server is composed of 4 docker containers:
+* MLflow client (runs experiments)
+* MLflow server (receives data from experiments)
+* MinIO object storage server [`minio`](https://hub.docker.com/r/minio/minio) (holds artifacts from experiments)
+* (temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `mlflow` bucket upon startup)
+* MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server) (tracks tabular experimental results)
 
-* MLFlow server
-* MinIO object storage server
-* MySQL database server
-* MLFlow client (runs the experiment)
-* (temporary) MinIO `mc` program to create initial buckets upon MinIO startup
 
 ## Local Example
+If you want to interact with the MLflow server from other computers or environments, consult the following:
 
 1. Install Python (perhaps with [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)) and activate your environment.
 
@@ -57,12 +59,13 @@ The MLflow tracking server is composed of 4 docker containers:
     pip install mlflow[extras] boto3
     ```
 
-3. Set environmental variables
+3. Set environmental variables (replace `<ip address>` with `localhost` or your remote server's IP)
 
     ```bash
-    export MLFLOW_TRACKING_URI=http://localhost:5000
-    export MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
+    export MLFLOW_TRACKING_URI=http://<ip address>:5000
+    export MLFLOW_S3_ENDPOINT_URL=http://<ip address>:9000
     ```
+
 4. Set MinIO credentials
 
     ```bash
@@ -80,11 +83,13 @@ The MLflow tracking server is composed of 4 docker containers:
     ```
 
  6. Serve the model (replace with your model's actual path)
+
     ```bash
     mlflow models serve -m S3://mlflow/0/98bdf6ec158145908af39f86156c347f/artifacts/model -p 1234
     ```
 
- 7. You can check the input with this command
+ 7. You can check the input with this command (replacing `<ip address>` again)
+
     ```bash
-    curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
+    curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://<ip address>:1234/invocations
     ```
