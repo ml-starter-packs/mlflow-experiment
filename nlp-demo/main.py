@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import random
+import time
 
 # for loading environment variables from a file:
 # the .env file contains values required by MLFlow
@@ -44,8 +45,14 @@ for model_uri in models:
         desc = f"{model_uri} being used in a demo evaluation."
         mlflow.set_tag("mlflow.note.content", desc)
         mlflow.set_tag("mlflow.user", "data-scientist-1")
+
+        start_time = time.time()
         model = pipeline(model=model_uri, return_all_scores=True)
+        time_load = time.time() - start_time
+
+        start_time = time.time()
         predictions = model(data)
+        time_infer = time.time() - start_time
 
         # demonstrate storing artifacts (any kind)
         os.makedirs("data", exist_ok=True)  # can use folders
@@ -60,6 +67,11 @@ for model_uri in models:
 
         # compute metrics here somehow
         # need to look up expected answers
-        metrics = {"metric": random.random()}
+        metrics = {
+            "metric": random.random(),
+            "duration": time_load + time_infer,
+            "inference-time": time_infer,
+            "loading-time": time_load,
+        }
         mlflow.log_metrics(metrics)
     print(f"{predictions}\n")
