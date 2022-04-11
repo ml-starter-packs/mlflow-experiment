@@ -25,7 +25,7 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 5. Watch as experiments begin to populate as they run from [./nlp-demo/main.py](/nlp-demo/main.py).
 
 
-6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000)
+6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLFlow artifacts are organized in the S3-compatible object storage.
 
 
 ## Running New Experiments
