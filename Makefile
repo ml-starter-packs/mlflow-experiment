@@ -4,7 +4,13 @@ run:
 start:
 	docker-compose up -d --build
 
+stop:
+	docker rm -f \
+	mlflow_s3 \
+	mc \
+	mlflow_db \
+	mlflow_server \
+	mlflow_client
 
-# TODO: docker-compose support for GPU?
-#gpu-test:
-#	docker run --gpus all -it --rm nvcr.io/nvidia/pytorch:22.03-py3
+clean: stop
+	docker volume rm mlflow-experiment_dbdata mlflow-experiment_minio_data
