@@ -59,18 +59,24 @@ make stop
 A complete example that would resemble local usage can be found at `[./nlp-demo/example.sh](./nlp-demo/example.sh)` and run with
 
 ```bash
-make demo
+make serve
 ```
 
 You have just trained a model from [mlflow/mlflow-example](https://github.com/mlflow/mlflow-example) under the `Default` experiment (you can see it in your [localhost MLflow UI](http://localhost:5000/#/experiments/0)) and begun to serve it as an API endpoint.
 Give it a set of samples to predict on using `curl` with
 
 ```bash
-make test
+make post
 ```
 
 Note: you can run `[./nlp-demo/example.sh](./nlp-demo/example.sh)` locally if you prefer (it is designed as a complete example). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
 
+
+You can stop serving your model (perhaps if you want to try running the serving demo a second time) with
+
+```bash
+make kill
+```
 
 ## Running New Experiments
 
