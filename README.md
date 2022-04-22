@@ -7,7 +7,7 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 ## How to run
 0. Install [Docker](https://docs.docker.com/get-docker/) and ensure you have [docker-compose](https://docs.docker.com/compose/install/) installed.
 
-1. Clone(download) this repository
+1. Clone (download) this repository
 
     ```bash
     git clone https://github.com/ml-starter-packs/mlflow-experiment.git
