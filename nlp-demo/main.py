@@ -57,7 +57,8 @@ def run_experiment(
     experiment = mlflow.set_experiment(experiment_name)
 
     for model_uri in models:
-        with mlflow.start_run(experiment_id=experiment.experiment_id):
+        name = f"demo of {model_uri.split('/')[-1]}"
+        with mlflow.start_run(experiment_id=experiment.experiment_id, run_name=name):
             mlflow.log_param("model", model_uri)
             mlflow.log_artifact(
                 "main.py", artifact_path="in"
