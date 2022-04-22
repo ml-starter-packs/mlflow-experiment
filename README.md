@@ -31,12 +31,13 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 
 ## Running New Experiments
 
-Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLflow) using `docker-compose run nlp`
+Edit `./nlp-demo/main.py` and re-run the experiment service (if you commit your code, it should be visible in MLflow) using `docker-compose run nlp`:
 
-    ```bash
-    make run
-    ```
+```bash
+make run
+```
 
+You will find your new results populated in the existing `demo` experiment.
 
 ## Architecture
 
@@ -99,12 +100,12 @@ If you want to interact with the MLflow server from other computers or environme
 
 To stop all containers and remove all volumes (i.e., purge all stored data), run
 
-    ```bash
-    make clean
-    ```
+```bash
+make clean
+```
 
 To stop all running containers _without_ removing volumes, run
 
-    ```bash
-    make stop
-    ```
+```bash
+make stop
+```
