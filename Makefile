@@ -14,3 +14,4 @@ stop:
 
 clean: stop
 	docker volume rm mlflow-experiment_dbdata mlflow-experiment_minio_data
+	docker network rm mlflow-experiment_default
