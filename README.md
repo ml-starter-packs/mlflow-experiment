@@ -7,10 +7,10 @@ Easily deploy an MLflow tracking server with 1 command.
 
 The MLflow tracking server is composed of 4 docker containers:
 * MLflow client (runs experiments)
-* MLflow server (receives data from experiments)
+* MLflow server / web interface at [`localhost:5000`](http://localhost:5000/) (receives data from experiments)
 * MinIO object storage server [`minio`](https://hub.docker.com/r/minio/minio) (holds artifacts from experiments)
-* (temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `mlflow` bucket upon startup)
 * MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server) (tracks tabular experimental results)
+* (and a fifth temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `s3://mlflow/` bucket upon startup)
 
 
 ## Quickstart
