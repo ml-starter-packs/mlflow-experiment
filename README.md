@@ -26,7 +26,7 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 5. Watch as experiments begin to populate as they run from [./nlp-demo/main.py](/nlp-demo/main.py).
 
 
-6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage.
+6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage (default credentials are `minio` / `minio123`).
 
 
 ## Running New Experiments
@@ -56,7 +56,7 @@ A complete example that would resemble local usage can be found at [./nlp-demo/e
 make demo
 ```
 
-You have just trained a model under the `Default` experiment (you can see it in the MLflow UI) and begun to serve it as an API endpoint.
+You have just trained a model from [mlflow/mlflow-example](https://github.com/mlflow/mlflow-example) under the `Default` experiment (you can see it in your [localhost MLflow UI](http://localhost:5000/#/experiments/0)) and begun to serve it as an API endpoint.
 Give it a set of samples to predict on using `curl` with
 
 ```bash
