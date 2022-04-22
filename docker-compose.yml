@@ -64,7 +64,7 @@ services:
 
     nlp:
         build: ./nlp-demo
-        image: nlp-demo
+        image: mlflow_nlp_demo
         depends_on:
             - web
         container_name: mlflow_client
