@@ -33,7 +33,7 @@ The MLflow tracking server is composed of 4 docker containers:
 
 4. Access MLflow UI with [http://localhost:5000](http://localhost:5000)
 
-5. Watch as experiments begin to populate as they run from [./nlp-demo/main.py](/nlp-demo/main.py).
+5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5000/#/experiments/1)) as the script [./nlp-demo/main.py](/nlp-demo/main.py) executes.
 
 
 6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage (default credentials are `minio` / `minio123`).
