@@ -46,7 +46,7 @@ To stop all containers and remove all volumes (i.e., purge all stored data), run
 ```bash
 make clean
 ```
-You may see an error message about the `mlflow_client` container not existing, this is expected and occurs if you run `clean` after the initial demo completes.
+
 To stop all running containers _without_ removing volumes (i.e. you want the state of the application to persist), run
 
 ```bash
