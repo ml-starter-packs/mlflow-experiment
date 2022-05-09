@@ -15,7 +15,7 @@ The MLflow tracking server is composed of 4 docker containers:
 
 ## Quickstart
 
-0. Install [Docker](https://docs.docker.com/get-docker/) and ensure you have [docker-compose](https://docs.docker.com/compose/install/) installed. Make sure you have `make` installed as well (and `awk`, `grep`, `curl`, `head`, and `tail` for the [serving example](#
+0. Install [Docker](https://docs.docker.com/get-docker/) and ensure you have [docker-compose](https://docs.docker.com/compose/install/) installed. Make sure you have `make` installed as well (and `awk`, `grep`, `curl`, `head`, and `tail` for the [serving example](#training-and-serving-example).
 
 1. Clone (download) this repository
 
@@ -33,7 +33,7 @@ The MLflow tracking server is composed of 4 docker containers:
 
 4. Access MLflow UI with [http://localhost:5000](http://localhost:5000)
 
-5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5000/#/experiments/1) as the script [./nlp-demo/main.py](/nlp-demo/main.py) executes.
+5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5000/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes.
 
 
 6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage (default credentials are `minio` / `minio123`).
@@ -54,9 +54,9 @@ make stop
 ```
 
 
-## Training + Serving Example
+## Training and Serving Example
 
-A complete example that would resemble local usage can be found at [`./nlp-demo/example.sh`](./nlp-demo/example.sh) and run with
+A complete example that would resemble local usage can be found at [`./examples/train-and-serve.sh`](./examples/train-and-serve.sh) and run with
 
 ```bash
 make serve
@@ -77,12 +77,12 @@ You can stop serving your model (perhaps if you want to try running the serving 
 make kill
 ```
 
-Note: you can run [`./nlp-demo/example.sh`](./nlp-demo/example.sh) locally if you prefer (it is designed as a complete example). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
+Note: you can run [`./examples/train-and-serve.sh`](./examples/train-and-serve.sh) locally if you prefer (it is designed as a complete example). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
 
 
 ## Running New Experiments
 
-Edit [`./nlp-demo/main.py`](./nlp-demo/main.py) and re-run the experiment service (if you commit your code, the latest git hash will be reflected in MLflow) using `docker-compose run nlp`:
+Edit [`./examples/main.py`](./examples/main.py) and re-run the experiment service (if you commit your code, the latest git hash will be reflected in MLflow) using `docker-compose run nlp`:
 
 ```bash
 make run
