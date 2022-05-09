@@ -77,7 +77,7 @@ You can stop serving your model (perhaps if you want to try running the serving 
 make kill
 ```
 
-Note: you can run [`./examples/train-and-serve.sh`](./examples/train-and-serve.sh) locally if you prefer (it is designed as a complete example) but you need to change the URLS to point to your local IP address and reflect that mlflow is _exposed_ on port `5555` (the service runs on `5000` within its container but this is a commonly used port so it is changed to avoid potential conflicts with existing services on your machine). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
+Note: you can run [`./examples/train-and-serve.sh`](./examples/train-and-serve.sh) locally if you prefer (it is designed as a complete example) but you need to change the URLs to point to your local IP address and reflect that mlflow is _exposed_ on port `5555` (the service runs on `5000` within its container but this is a commonly used port so it is changed to avoid potential conflicts with existing services on your machine). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
 
 
 ## Running New Experiments
