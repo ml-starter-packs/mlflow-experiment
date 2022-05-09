@@ -7,7 +7,7 @@ Easily deploy an MLflow tracking server with 1 command.
 
 The MLflow tracking server is composed of 4 docker containers:
 * MLflow client (runs experiments)
-* MLflow server / web interface at [`localhost:5000`](http://localhost:5000/) (receives data from experiments)
+* MLflow server / web interface at [`localhost:5555`](http://localhost:5555/) (receives data from experiments)
 * MinIO object storage server [`minio`](https://hub.docker.com/r/minio/minio) (holds artifacts from experiments)
 * MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server) (tracks tabular experimental results)
 * (and a fifth temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `s3://mlflow/` bucket upon startup)
@@ -31,9 +31,9 @@ The MLflow tracking server is composed of 4 docker containers:
     make
     ```
 
-4. Access MLflow UI with [http://localhost:5000](http://localhost:5000)
+4. Access MLflow UI with [http://localhost:5555](http://localhost:5555)
 
-5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5000/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes.
+5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5555/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes.
 
 
 6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage (default credentials are `minio` / `minio123`).
@@ -46,7 +46,7 @@ To stop all containers and remove all volumes (i.e., purge all stored data), run
 ```bash
 make clean
 ```
-
+You may see an error message about the `mlflow_client` container not existing, this is expected and occurs if you run `clean` after the initial demo completes.
 To stop all running containers _without_ removing volumes (i.e. you want the state of the application to persist), run
 
 ```bash
@@ -62,7 +62,7 @@ A complete example that would resemble local usage can be found at [`./examples/
 make serve
 ```
 
-This demo trains a model using [mlflow/mlflow-example](https://github.com/mlflow/mlflow-example) under the [`Default` experiment](http://localhost:5000/#/experiments/0)) and then serves it as an API endpoint.
+This demo trains a model using [mlflow/mlflow-example](https://github.com/mlflow/mlflow-example) under the [`Default` experiment](http://localhost:5555/#/experiments/0)) and then serves it as an API endpoint.
 
 
 Give it a set of samples to predict on using `curl` with
@@ -88,7 +88,7 @@ Edit [`./examples/main.py`](./examples/main.py) and re-run the experiment servic
 make run
 ```
 
-When it completes after a few minutes, you will find new results populated in the existing [`demo` experiment](http://localhost:5000/#/experiments/1), and a stopped container associated with the run will be visible when running `docker ps -a`.
+When it completes after a few minutes, you will find new results populated in the existing [`demo` experiment](http://localhost:5555/#/experiments/1), and a stopped container associated with the run will be visible when running `docker ps -a`.
 
 All runs can be removed with
 

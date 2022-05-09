@@ -1,8 +1,10 @@
 run:
-	docker-compose run nlp
+	docker-compose run -d nlp
+	@echo "Experiment running. Visit http://localhost:5555 to watch experiments begin to populate in 'demo'. Run 'docker logs mlflow_client' to see the status of the experiment"
 
 start:
 	docker-compose up -d --build
+	@echo "mlflow server started in background"
 
 stop: kill
 	@docker rm -f \
@@ -26,7 +28,7 @@ serve:
 	docker run --rm -tid \
 		-e MLFLOW_S3_ENDPOINT_URL="http://minio:9000" \
 		-e MLFLOW_TRACKING_URI="http://web:9000" \
-		-v `pwd`/nlp-demo/example.sh:/tmp/run.sh \
+		-v `pwd`/examples/train-and-serve.sh:/tmp/run.sh \
 		-p 1234:1234 \
 		--name mlflow_serve_demo \
 		--network mlflow-experiment_default \
