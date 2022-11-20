@@ -8,7 +8,7 @@ run:
 	@echo "Experiment running. Visit http://localhost:5555 to watch experiments begin to populate in 'demo'. Run 'docker logs mlflow_client' to see the status of the experiment"
 
 
-clean: stop clean-runs
+clean: stop rm
 	@docker volume rm -f mlflow-experiment_dbdata mlflow-experiment_minio_data
 	@echo "\n\t>> all containers, volumes, and networks from the experiment have been deleted"
 
@@ -29,6 +29,6 @@ stop:
 	@docker-compose down
 	@echo "\t>> containers for services removed"
 
-clean-runs:
+rm:
 	@docker ps -a | grep nlp_run | awk '{print $$1}' | xargs docker rm -f
 	@echo "\t>> containers for docker-compose runs removed"

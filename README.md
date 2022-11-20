@@ -74,7 +74,7 @@ make post
 You can stop serving your model (perhaps if you want to try running the serving demo a second time) with
 
 ```bash
-make kill
+make stop
 ```
 
 Note: you can run [`./examples/train-and-serve.sh`](./examples/train-and-serve.sh) locally if you prefer (it is designed as a complete example) but you need to change the URLs to point to your local IP address and reflect that mlflow is _exposed_ on port `5555` (the service runs on `5000` within its container but this is a commonly used port so it is changed to avoid potential conflicts with existing services on your machine). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
@@ -90,10 +90,32 @@ make run
 
 When it completes after a few minutes, you will find new results populated in the existing [`demo` experiment](http://localhost:5555/#/experiments/1), and a stopped container associated with the run will be visible when running `docker ps -a`.
 
-All runs can be removed with
+The container associated with the example runs can be removed with
 
 ```bash
-make clean-runs
+make rm
 ```
 
 Note: This instruction is also run by `make clean`.
+
+
+## A Note on Docker Setup
+This may be of more relevance to some than others, depending on which container-orchestration client you are using.
+If you get credential errors from trying to pull the images, it is because your program is not sure what domain name to infer (some private registry or docker's default?).
+
+You can make explicit where you want images that are not prepended with a domain name to come from by setting your docker config file:
+
+```sh
+cat ~/.docker/config.json 
+{
+  "experimental" : "disabled",
+  "credStore" : "desktop",
+  "auths" : {
+    "https://index.docker.io/v1/" : {
+
+    }
+  }
+}
+```
+
+Be aware that it may be `credStore` or `credsStore` depending on your setup.

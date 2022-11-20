@@ -3,7 +3,7 @@
 echo "Creating environment"
 pip install --quiet mlflow[extras] boto3
 
-export MLFLOW_TRACKING_URI=http://web:5000
+export MLFLOW_TRACKING_URI=http://web:5555
 export MLFLOW_S3_ENDPOINT_URL=http://minio:9000
 
 echo "Setting credentials"

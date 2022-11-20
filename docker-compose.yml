@@ -20,8 +20,6 @@ services:
         depends_on:
             - minio
         container_name: mc
-        env_file:
-            - .env
         entrypoint: >
             /bin/sh -c "
             /tmp/wait-for-it.sh minio:9000 && 
@@ -34,17 +32,16 @@ services:
 
     db:
         restart: always
-        image: mysql/mysql-server:8.0.28-1.2.7-server
+        image: postgres:15.1-alpine3.16
         container_name: mlflow_db
         ports:
-            - "3306:3306"
+            - "${DB_PORT}:${DB_PORT}"
         environment:
-            - MYSQL_DATABASE=${MYSQL_DATABASE}
-            - MYSQL_USER=${MYSQL_USER}
-            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
         volumes:
-            - dbdata:/var/lib/mysql
+            - dbdata:/var/lib/postgresql/data
 
     web:
         restart: always
@@ -55,12 +52,17 @@ services:
             - mc
             - db
         ports:
-            - "5555:5000"
+            - "${MLFLOW_PORT}:${MLFLOW_PORT}"
         environment:
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-        command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow/ --host 0.0.0.0
+        command: >
+            mlflow server
+                --backend-store-uri postgresql://${DB_USER}:${DB_PASS}@db:${DB_PORT}/${DB_NAME}
+                --default-artifact-root s3://mlflow/
+                --host 0.0.0.0
+                --port ${MLFLOW_PORT}
 
     nlp:
         build: ./examples
@@ -69,13 +71,13 @@ services:
             - web
         container_name: mlflow_client
         environment:
-            - MLFLOW_TRACKING_URI=http://web:5000
+            - MLFLOW_TRACKING_URI=http://web:${MLFLOW_PORT}
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         command: >
-            /bin/sh -c "
-            /tmp/wait-for-it.sh web:5000 -t 30 &&
+           /bin/sh -c "
+            /tmp/wait-for-it.sh web:${MLFLOW_PORT} -t 30 &&
             cd /work/examples && python main.py;
             exit 0;
             "
