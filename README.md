@@ -33,7 +33,7 @@ The MLflow tracking server is composed of 4 docker containers:
 
 4. Access MLflow UI with [http://localhost:5555](http://localhost:5555)
 
-5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5555/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes.
+5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5555/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes. (NOTE: three of the four HuggingFace models seem to be unsupported on `arm64` architectures, so this demo is best run through a machine with an `amd64` processor).
 
 
 6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage (default credentials are `minio` / `minio123`).
@@ -119,3 +119,4 @@ cat ~/.docker/config.json
 ```
 
 Be aware that it may be `credStore` or `credsStore` depending on your setup.
+

@@ -30,5 +30,5 @@ stop:
 	@echo "\t>> containers for services removed"
 
 rm:
-	@docker ps -a | grep nlp_run | awk '{print $$1}' | xargs docker rm -f
+	@docker ps -a | grep nlp_run | awk '{print $$1}' | xargs docker rm -f|| exit 0
 	@echo "\t>> containers for docker-compose runs removed"
