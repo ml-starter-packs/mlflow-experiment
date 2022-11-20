@@ -130,3 +130,6 @@ dmypy.json
 
 # Project files
 nlp-demo/out/
+
+# Other
+.DS_Store
