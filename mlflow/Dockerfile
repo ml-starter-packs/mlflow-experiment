@@ -3,11 +3,9 @@ FROM python:3.10-slim-buster
 # we uninstall the compiler afterwards to save space
 RUN apt-get update -y && \
 	apt-get install -yqq \
-	g++ \
 	libpq-dev \
+	libssl-dev \
 	&& \
-	pip install shap~=0.40 && \
-	apt-get remove -yqq g++ && \
 	rm -rf /var/lib/apt/lists* && \
 	apt-get clean -yqq
 
