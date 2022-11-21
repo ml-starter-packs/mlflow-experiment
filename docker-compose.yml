@@ -59,7 +59,7 @@ services:
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         command: >
             mlflow server
-                --backend-store-uri postgresql://${DB_USER}:${DB_PASS}@db:${DB_PORT}/${DB_NAME}
+                --backend-store-uri ${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
                 --default-artifact-root s3://mlflow/
                 --host 0.0.0.0
                 --port ${MLFLOW_PORT}
@@ -76,7 +76,7 @@ services:
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         command: >
-           /bin/sh -c "
+            /bin/sh -c "
             /tmp/wait-for-it.sh web:${MLFLOW_PORT} -t 30 &&
             cd /work/examples && python main.py;
             exit 0;

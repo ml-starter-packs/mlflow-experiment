@@ -1,17 +1,15 @@
 #!/bin/sh
 
+source .env
 echo "Creating environment"
 pip install --quiet mlflow[extras] boto3
-
-export MLFLOW_TRACKING_URI=http://web:5555
-export MLFLOW_S3_ENDPOINT_URL=http://minio:9000
 
 echo "Setting credentials"
 mkdir -p ~/.aws
 cat <<EOF > ~/.aws/credentials
 [default]
-aws_access_key_id=minio
-aws_secret_access_key=minio123
+aws_access_key_id=${AWS_ACCESS_KEY_ID}
+aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}
 EOF
 
 echo "Running example"
