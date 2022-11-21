@@ -30,24 +30,24 @@ services:
         volumes:
             - ./wait-for-it.sh:/tmp/wait-for-it.sh
 
-    db:
-        restart: always
-        # image: mysql/mysql-server:8.0.28-1.2.7-server
-        image: postgres:15.1-alpine3.16
-        container_name: mlflow_db
-        ports:
-            - "${DB_PORT}:${DB_PORT}"
-        environment:
-            # - MYSQL_DATABASE=${DB_NAME}
-            # - MYSQL_USER=${DB_USER}
-            # - MYSQL_PASSWORD=${DB_PASS}
-            # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-            - POSTGRES_DB=${DB_NAME}
-            - POSTGRES_USER=${DB_USER}
-            - POSTGRES_PASSWORD=${DB_PASS}
-        volumes:
-            # - dbdata:/var/lib/mysql
-            - dbdata:/var/lib/postgresql/data
+    # db:
+    #     restart: always
+    #     # image: mysql/mysql-server:8.0.28-1.2.7-server
+    #     image: postgres:15.1-alpine3.16
+    #     container_name: mlflow_db
+    #     ports:
+    #         - "${DB_PORT}:${DB_PORT}"
+    #     environment:
+    #         # - MYSQL_DATABASE=${DB_NAME}
+    #         # - MYSQL_USER=${DB_USER}
+    #         # - MYSQL_PASSWORD=${DB_PASS}
+    #         # - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    #         - POSTGRES_DB=${DB_NAME}
+    #         - POSTGRES_USER=${DB_USER}
+    #         - POSTGRES_PASSWORD=${DB_PASS}
+    #     volumes:
+    #         # - dbdata:/var/lib/mysql
+    #         - dbdata:/var/lib/postgresql/data
 
     web:
         restart: always
@@ -56,7 +56,7 @@ services:
         container_name: mlflow_server
         depends_on:
             - mc
-            - db
+            # - db
         ports:
             - "${MLFLOW_PORT}:${MLFLOW_PORT}"
         environment:
@@ -65,7 +65,7 @@ services:
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         command: >
             mlflow server
-                --backend-store-uri ${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+                --backend-store-uri ${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}
                 --default-artifact-root s3://mlflow/
                 --host 0.0.0.0
                 --port ${MLFLOW_PORT}
@@ -93,5 +93,5 @@ services:
 
 
 volumes:
-    dbdata:
+    # dbdata:
     minio_data:
