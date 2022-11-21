@@ -1,7 +1,7 @@
+distilbert-base-uncased-finetuned-sst-2-english
 finiteautomata/bertweet-base-sentiment-analysis
 sbcBI/sentiment_analysis_model
 juliensimon/reviews-sentiment-analysis
-distilbert-base-uncased-finetuned-sst-2-english
 elozano/tweet_sentiment_eval
 nlptown/bert-base-multilingual-uncased-sentiment
 bhadresh-savani/distilbert-base-uncased-emotion
