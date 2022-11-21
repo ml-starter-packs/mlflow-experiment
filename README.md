@@ -9,7 +9,9 @@ The MLflow tracking server is composed of 4 docker containers:
 * MLflow client (runs experiments)
 * MLflow server / web interface at [`localhost:5555`](http://localhost:5555/) (receives data from experiments)
 * MinIO object storage server [`minio`](https://hub.docker.com/r/minio/minio) (holds artifacts from experiments)
-* MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server) (tracks tabular experimental results)
+* A database to track tabular experimental results, either:
+  * PostGres database server [`postgres`](https://hub.docker.com/_/postgres), or
+  * MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server)
 * (and a fifth temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `s3://mlflow/` bucket upon startup)
 
 
