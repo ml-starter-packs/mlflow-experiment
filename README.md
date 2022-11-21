@@ -10,7 +10,7 @@ The MLflow tracking server is composed of 4 docker containers:
 * MLflow server / web interface at [`localhost:5555`](http://localhost:5555/) (receives data from experiments)
 * MinIO object storage server [`minio`](https://hub.docker.com/r/minio/minio) (holds artifacts from experiments)
 * A database to track tabular experimental results, either:
-  * PostGres database server [`postgres`](https://hub.docker.com/_/postgres), or
+  * PostgreSQL database server [`postgres`](https://hub.docker.com/_/postgres), or
   * MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server)
 * (and a fifth temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `s3://mlflow/` bucket upon startup)
 
@@ -123,7 +123,7 @@ cat ~/.docker/config.json
 Be aware that it may be `credStore` or `credsStore` depending on your setup.
 
 
-## A Note on Clearing Your Database
+## A Note on Clearing Your Database (and Serverless PostgreSQL)
 When using the docker-compose setup here, `make clean` will wipe your whole database, which is convenient for testing.
 However, you may eventually move to a "real" database (perhaps a managed service) and notice that runs you delete in the MLflow UI are NOT removed from your tables.
 
@@ -139,4 +139,10 @@ DB_TYPE=<postgresql or mysql+pymysql>
 DB_NAME=<name>
 
 mlflow gc --backend-store-uri --backend-store-uri ${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}
+```
+
+For [neon.tech](https://neon.tech/docs/how-to-guides/connectivity-issues/), note that you need to pass extra arguments to your `DB_NAME` (note `project-id` is not the same thing as the "project name":
+
+```bash
+DB_NAME=<db-name>?sslmode=require&options=project%3D<project-id>
 ```
