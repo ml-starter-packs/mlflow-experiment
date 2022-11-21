@@ -1,4 +1,4 @@
-FROM docker.io/python:3.10-slim-buster
+FROM python:3.10-slim-buster
 # on arm64 systems, shap needs to build from source
 # we uninstall the compiler afterwards to save space
 RUN apt-get update -y && \
