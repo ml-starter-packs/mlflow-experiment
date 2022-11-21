@@ -8,6 +8,7 @@ FROM python:3.10-slim-buster
 RUN apt-get update -y && \
 	apt-get install -yqq \
 	git \
+	g++ \
 	&& \
 	rm -rf /var/lib/apt/lists* && \
 	apt-get clean -yqq

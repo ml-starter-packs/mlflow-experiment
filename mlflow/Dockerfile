@@ -5,6 +5,7 @@ RUN apt-get update -y && \
 	apt-get install -yqq \
 	g++ \
 	libpq-dev \
+	libssl-dev \
 	&& \
 	pip install shap~=0.40 && \
 	apt-get remove -yqq g++ && \
