@@ -120,3 +120,21 @@ cat ~/.docker/config.json
 
 Be aware that it may be `credStore` or `credsStore` depending on your setup.
 
+
+## A Note on Clearing Your Database
+When using the docker-compose setup here, `make clean` will wipe your whole database, which is convenient for testing.
+However, you may eventually move to a "real" database (perhaps a managed service) and notice that runs you delete in the MLflow UI are NOT removed from your tables.
+
+To remove runs from your tables, the command resembles the one used to launch the mlflow server:
+
+```bash
+docker exec -ti mlflow_server bash
+
+DB_HOST=<hosted db>
+DB_USER=<username>
+DB_PASS=<password>
+DB_TYPE=<postgresql or mysql+pymysql>
+DB_NAME=<name>
+
+mlflow gc --backend-store-uri --backend-store-uri ${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}
+```
