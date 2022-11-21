@@ -14,8 +14,7 @@ clean: stop rm
 
 serve:
 	docker run --rm -tid \
-		-e MLFLOW_S3_ENDPOINT_URL="http://minio:9000" \
-		-e MLFLOW_TRACKING_URI="http://web:9000" \
+		--env-file examples/.env \
 		-v `pwd`/examples/train-and-serve.sh:/tmp/run.sh \
 		-p 1234:1234 \
 		--name mlflow_serve_demo \
@@ -30,5 +29,5 @@ stop:
 	@echo "\t>> containers for services removed"
 
 rm:
-	@docker ps -a | grep nlp_run | awk '{print $$1}' | xargs docker rm -f|| exit 0
+	@docker ps -a | grep -e nlp_run -e nlp_demo | awk '{print $$1}' | xargs docker rm -f|| exit 0
 	@echo "\t>> containers for docker-compose runs removed"
