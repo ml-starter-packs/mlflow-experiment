@@ -129,4 +129,8 @@ dmypy.json
 .pyre/
 
 # Project files
-nlp-demo/out/
+examples/out/
+
+# Other
+.DS_Store
+

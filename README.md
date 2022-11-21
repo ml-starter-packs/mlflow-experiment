@@ -9,7 +9,9 @@ The MLflow tracking server is composed of 4 docker containers:
 * MLflow client (runs experiments)
 * MLflow server / web interface at [`localhost:5555`](http://localhost:5555/) (receives data from experiments)
 * MinIO object storage server [`minio`](https://hub.docker.com/r/minio/minio) (holds artifacts from experiments)
-* MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server) (tracks tabular experimental results)
+* A database to track tabular experimental results, either:
+  * PostGres database server [`postgres`](https://hub.docker.com/_/postgres), or
+  * MySQL database server [`mysql`](https://hub.docker.com/r/mysql/mysql-server)
 * (and a fifth temporary) MinIO client [`mc`](https://hub.docker.com/r/minio/mc) (to create initial `s3://mlflow/` bucket upon startup)
 
 
@@ -33,7 +35,7 @@ The MLflow tracking server is composed of 4 docker containers:
 
 4. Access MLflow UI with [http://localhost:5555](http://localhost:5555)
 
-5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5555/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes.
+5. Watch as runs begin to populate in the [`demo` experiment](http://localhost:5555/#/experiments/1) as the script [./examples/main.py](/examples/main.py) executes. (NOTE: most of the HuggingFace models seem to be unsupported on `arm64` architectures, so this demo is best run through a machine with an `amd64` processor).
 
 
 6. (optional) Access MinIO UI with [http://localhost:9000](http://localhost:9000) to see how MLflow artifacts are organized in the S3-compatible object storage (default credentials are `minio` / `minio123`).
@@ -74,7 +76,7 @@ make post
 You can stop serving your model (perhaps if you want to try running the serving demo a second time) with
 
 ```bash
-make kill
+make stop
 ```
 
 Note: you can run [`./examples/train-and-serve.sh`](./examples/train-and-serve.sh) locally if you prefer (it is designed as a complete example) but you need to change the URLs to point to your local IP address and reflect that mlflow is _exposed_ on port `5555` (the service runs on `5000` within its container but this is a commonly used port so it is changed to avoid potential conflicts with existing services on your machine). Take note that you may want to omit the `--no-conda` flags if you want to use the default behavior of `mlflow serve` which leverages [Anaconda](https://www.anaconda.com/).
@@ -90,10 +92,51 @@ make run
 
 When it completes after a few minutes, you will find new results populated in the existing [`demo` experiment](http://localhost:5555/#/experiments/1), and a stopped container associated with the run will be visible when running `docker ps -a`.
 
-All runs can be removed with
+The container associated with the example runs can be removed with
 
 ```bash
-make clean-runs
+make rm
 ```
 
 Note: This instruction is also run by `make clean`.
+
+
+## A Note on Docker Setup
+This may be of more relevance to some than others, depending on which container-orchestration client you are using.
+If you get credential errors from trying to pull the images, it is because your program is not sure what domain name to infer (some private registry or docker's default?).
+
+You can make explicit where you want images that are not prepended with a domain name to come from by setting your docker config file:
+
+```sh
+cat ~/.docker/config.json 
+{
+  "experimental" : "disabled",
+  "credStore" : "desktop",
+  "auths" : {
+    "https://index.docker.io/v1/" : {
+
+    }
+  }
+}
+```
+
+Be aware that it may be `credStore` or `credsStore` depending on your setup.
+
+
+## A Note on Clearing Your Database
+When using the docker-compose setup here, `make clean` will wipe your whole database, which is convenient for testing.
+However, you may eventually move to a "real" database (perhaps a managed service) and notice that runs you delete in the MLflow UI are NOT removed from your tables.
+
+To remove runs from your tables, the command resembles the one used to launch the mlflow server:
+
+```bash
+docker exec -ti mlflow_server bash
+
+DB_HOST=<hosted db>
+DB_USER=<username>
+DB_PASS=<password>
+DB_TYPE=<postgresql or mysql+pymysql>
+DB_NAME=<name>
+
+mlflow gc --backend-store-uri --backend-store-uri ${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}
+```
