@@ -146,3 +146,4 @@ For [neon.tech](https://neon.tech/docs/how-to-guides/connectivity-issues/), note
 ```bash
 DB_NAME=<db-name>?sslmode=require&options=project%3D<project-id>
 ```
+(alternatively, leave `options` off if your project-id is used as your subdomain when specifying `DB_HOST`)
