@@ -2,15 +2,19 @@
 
 echo Tracking URI: ${MLFLOW_TRACKING_URI}
 echo "Creating environment"
-pip install --quiet mlflow[extras]~=1.27 boto3
+### mlflow server/client version don't need to match.
+# pip install --quiet mlflow[extras]==1.27 boto3
+pip install --quiet mlflow[extras] boto3
 
-echo "Setting credentials"
-mkdir -p ~/.aws
-cat <<EOF > ~/.aws/credentials
-[default]
-aws_access_key_id=${AWS_ACCESS_KEY_ID}
-aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}
-EOF
+### Need MLFLOW_TRACKING_URI + AWS credentials as environment variables.
+### consider this section if not using local .env file / docker image.
+# echo "Setting credentials"
+# mkdir -p ~/.aws
+# cat <<EOF > ~/.aws/credentials
+# [default]
+# aws_access_key_id=${AWS_ACCESS_KEY_ID}
+# aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}
+# EOF
 
 echo "Running example"
 mlflow run --env-manager=local https://github.com/mlflow/mlflow-example.git -P alpha=0.42 --run-name test-example
